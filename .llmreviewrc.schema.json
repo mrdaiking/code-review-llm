@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LLM Review Configuration",
+  "description": "Configuration file for AI-powered code review",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable or disable AI code review"
+    },
+    "llm": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["openai", "anthropic", "azure"],
+          "default": "openai",
+          "description": "LLM provider to use"
+        },
+        "model": {
+          "type": "string",
+          "default": "gpt-4",
+          "description": "Model to use for code review"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 0.1,
+          "description": "Temperature for LLM responses"
+        },
+        "maxTokens": {
+          "type": "number",
+          "minimum": 100,
+          "maximum": 8000,
+          "default": 2000,
+          "description": "Maximum tokens for LLM responses"
+        }
+      },
+      "required": ["provider", "model"]
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "focusAreas": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "bugs",
+              "security",
+              "performance",
+              "readability",
+              "maintainability",
+              "best-practices",
+              "testing",
+              "documentation"
+            ]
+          },
+          "default": ["bugs", "security", "readability", "best-practices"],
+          "description": "Areas to focus on during review"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "default": "medium",
+          "description": "Minimum severity level for comments"
+        },
+        "maxComments": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 10,
+          "description": "Maximum number of comments per PR"
+        },
+        "excludePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "*.test.js",
+            "*.spec.js",
+            "node_modules/**",
+            "dist/**",
+            "build/**"
+          ],
+          "description": "File patterns to exclude from review"
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "properties": {
+        "custom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Rule name"
+              },
+              "description": {
+                "type": "string",
+                "description": "Rule description"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern to match"
+              },
+              "message": {
+                "type": "string",
+                "description": "Message to show when rule is violated"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["low", "medium", "high"],
+                "default": "medium"
+              }
+            },
+            "required": ["name", "description", "pattern", "message"]
+          },
+          "default": [],
+          "description": "Custom rules for code review"
+        }
+      }
+    }
+  },
+  "required": ["enabled", "llm", "review"]
+}

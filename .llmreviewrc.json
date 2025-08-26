@@ -1,0 +1,45 @@
+{
+  "enabled": true,
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4",
+    "temperature": 0.1,
+    "maxTokens": 2000
+  },
+  "review": {
+    "focusAreas": [
+      "bugs",
+      "security",
+      "readability",
+      "best-practices"
+    ],
+    "severity": "medium",
+    "maxComments": 10,
+    "excludePatterns": [
+      "*.test.js",
+      "*.spec.js",
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      "public/**"
+    ]
+  },
+  "rules": {
+    "custom": [
+      {
+        "name": "no-console-log",
+        "description": "Avoid console.log in production code",
+        "pattern": "console\\.log\\(",
+        "message": "Consider using a proper logging library instead of console.log",
+        "severity": "low"
+      },
+      {
+        "name": "react-hooks-deps",
+        "description": "Check useEffect dependencies",
+        "pattern": "useEffect\\([^,]+,\\s*\\[\\]\\)",
+        "message": "Empty dependency array might indicate missing dependencies",
+        "severity": "medium"
+      }
+    ]
+  }
+}
