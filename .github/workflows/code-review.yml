@@ -45,3 +45,44 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
           PR_DIFF: ${{ steps.diff.outputs.diff }}
         run: node src/services/reviewRunner.js
+
+      - name: Send LLM review to Slack with buttons
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          curl -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H "Content-type: application/json" \
+            --data '{
+              "channel": "test-bot",
+              "text": "Code review for PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Code Review Request*\n*PR #${{ github.event.pull_request.number }}:* ${{ github.event.pull_request.title }}\n\n*LLM Review:*\nReview output here\n\nPlease review and take action below:"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": { "type": "plain_text", "text": "✅ Approve" },
+                      "value": "approve_${{ github.event.pull_request.number }}",
+                      "action_id": "approve_action",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "text": { "type": "plain_text", "text": "💬 Request Changes" },
+                      "value": "comment_${{ github.event.pull_request.number }}",
+                      "action_id": "comment_action",
+                      "style": "danger"
+                    }
+                  ]
+                }
+              ]
+            }'
+        
