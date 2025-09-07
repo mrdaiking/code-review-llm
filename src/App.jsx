@@ -26,7 +26,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        Changes the text to test commit
+        Change Github Action flow and test second commit
       </p>
     </>
   )
