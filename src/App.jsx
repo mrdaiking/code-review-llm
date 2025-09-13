@@ -28,6 +28,27 @@ function App() {
       <p className="read-the-docs">
         Change Github Action flow and test second commit
       </p>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more about Vite and React
+      </p>
+      <p className="read-the-docs">
+        Edit <code>src/App.jsx</code> and save to test HMR again
+      </p>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more about Vite and React again
+      </p>
+      <p className="read-the-docs">
+        Edit <code>src/App.jsx</code> and save to test HMR again and again
+      </p>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more about Vite and React again and again
+      </p>
+      <p className="read-the-docs">
+        Edit <code>src/App.jsx</code> and save to test HMR again and again and again
+      </p>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more about Vite and React again and again and again
+      </p>
     </>
   )
 }

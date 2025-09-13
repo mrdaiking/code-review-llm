@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      actions: read
+      issues: read
     
     steps:
       - name: Checkout code
@@ -45,6 +47,16 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
           PR_DIFF: ${{ steps.diff.outputs.diff }}
         run: node src/services/reviewRunner.js
+
+      - name: Send review summary log to Slack
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          SUMMARY=$(cat review-summary.txt 2>/dev/null || echo "No summary file found.")
+          curl -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H "Content-type: application/json" \
+            --data "{\"channel\": \"test-bot\", \"text\": \"$SUMMARY\"}"
 
       - name: Send LLM review to Slack with buttons
         env:

@@ -31,16 +31,22 @@ async function runReview() {
     // Run the review
     const results = await reviewService.reviewPullRequest(parseInt(prNumber), diffText);
 
-    // Output results for GitHub Actions
+    // Output results for GitHub Actions and write summary file
+    let summaryText = '';
     if (results.skipped) {
-      console.log(`⏭️  Review skipped: ${results.reason}`);
+      summaryText = `⏭️  Review skipped: ${results.reason}`;
+      console.log(summaryText);
     } else {
-      console.log('📊 Review Results:');
-      console.log(`   Files reviewed: ${results.filesReviewed}`);
-      console.log(`   Comments generated: ${results.commentsGenerated}`);
-      console.log(`   Comments posted: ${results.commentsPosted}`);
-      console.log(`   Comments skipped: ${results.commentsSkipped}`);
-      console.log(`   Custom rule violations: ${results.customRuleViolations}`);
+      summaryText = [
+        '📊 Review Results:',
+        `   Files reviewed: ${results.filesReviewed}`,
+        `   Comments generated: ${results.commentsGenerated}`,
+        `   Comments posted: ${results.commentsPosted}`,
+        `   Comments skipped: ${results.commentsSkipped}`,
+        `   Custom rule violations: ${results.customRuleViolations}`,
+        '✅ Review completed successfully'
+      ].join('\n');
+      console.log(summaryText);
 
       // Set GitHub Actions output
       if (process.env.GITHUB_ACTIONS) {
@@ -50,7 +56,14 @@ async function runReview() {
       }
     }
 
-    console.log('✅ Review completed successfully');
+    // Write summary to file for Slack notification
+    try {
+      const fs = await import('fs');
+      fs.writeFileSync('review-summary.txt', summaryText);
+    } catch (err) {
+      console.error('Failed to write review-summary.txt:', err);
+    }
+
     process.exit(0);
 
   } catch (error) {
