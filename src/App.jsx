@@ -47,7 +47,7 @@ function App() {
         Edit <code>src/App.jsx</code> and save to test HMR again and again and again
       </p>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more about Vite and React again and again and again
+        Click on the Vite and React logos to learn more about Vite and React again and again and againfadsfdsfdsa fdsafsd
       </p>
     </>
   )
