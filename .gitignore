@@ -22,4 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+slack-backend/.env
 .env
+slack-backend/.env
